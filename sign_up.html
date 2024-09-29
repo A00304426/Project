@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="css/sign_up.css">
+</head>
+
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mobile">Mobile Number:</label>
+                <input type="tel" id="mobile" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" required>
+            </div>
+
+            <div class="form-group">
+                <label for="city">City:</label>
+                <select id="city" required></select>
+            </div>
+
+            <!-- User Type Radio Buttons -->
+            <div class="user-type-group">
+                <label>User Type:</label>
+                <div class="user-type-options">
+                    <input type="radio" id="labor" name="user_type" value="labor" required>
+                    <label for="labor">Labor Worker</label>
+
+                    <input type="radio" id="admin" name="user_type" value="admin">
+                    <label for="admin">Company Admin</label>
+                </div>
+            </div>
+
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <p>Already have an account? <a href="index.html">Log In</a></p>
+    </div>
+
+    <script src="js/sign_up.js"></script>
+</body>
+
+</html>
