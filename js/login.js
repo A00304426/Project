@@ -23,8 +23,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
             alert('Labour Login Successful!');
             console.log('Logged in user:', data);
             // Redirect to dashboard or another page
-            localStorage.setItem('labour_id', data.labour_id); // Store in localStorage
-            window.location.href = '/labour_dashboard.html';
+            // window.location.href = '/dashboard.html';
         })
         .catch(labourError => {
             console.error('Labour Login Error:', labourError);

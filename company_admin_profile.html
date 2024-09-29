@@ -1,0 +1,128 @@
+<!-- company_admin_profile.html -->
+<style>
+    /* Profile forms */
+    .profile-form {
+        max-width: 600px;
+        margin: 0 auto 0 auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+    }
+
+    /* Form groups */
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        width: 200px;
+        /* Fixed width for labels */
+        font-weight: bold;
+        color: #555;
+        margin-right: 10px;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+        flex: 1;
+        /* Input takes up remaining space */
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .form-group input[readonly] {
+        background-color: #e9ecef;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+        .form-group {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .form-group label {
+            width: auto;
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+    }
+
+    .btn {
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        border: none;
+    }
+</style>
+<div style="display: grid; grid-template-columns: 50% 50%; margin-top: -20px;">
+    <!-- Company Agent Profile -->
+    <div style="margin-right: 10px;">
+        <h2 class="section-title">Agent Profile</h2>
+        <form id="agent-profile-form" class="profile-form">
+            <div class="form-group">
+                <label for="agent-name">Name:</label>
+                <input type="text" id="agent-name" name="agent-name">
+            </div>
+
+            <div class="form-group">
+                <label for="agent-mobile">Mobile Number:</label>
+                <input type="text" id="agent-mobile" name="agent-mobile">
+            </div>
+
+            <div class="form-group">
+                <label for="agent-address">Address:</label>
+                <input type="text" id="agent-address" name="agent-address">
+            </div>
+
+            <div class="form-group">
+                <label for="agent-city">City:</label>
+                <input type="text" id="agent-city" name="agent-city">
+            </div>
+
+            <div class="form-group">
+                <label for="agent-email">Email:</label>
+                <input type="email" id="agent-email" name="agent-email">
+            </div>
+
+            <div class="form-group">
+                <label for="agent-password">Password:</label>
+                <input type="password" id="agent-password" name="agent-password">
+            </div>
+
+            <button type="button" id="agent-save-btn" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+
+    <div style="margin-left: 10px;">
+        <!-- Company Profile -->
+        <h2 class="section-title">Company Profile</h2>
+        <form id="company-profile-form" class="profile-form">
+            <div class="form-group">
+                <label for="company-name">Company Name:</label>
+                <input type="text" id="company-name" name="company-name" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="company-address">Address:</label>
+                <input type="text" id="company-address" name="company-address" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="company-city">City:</label>
+                <input type="text" id="company-city" name="company-city" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="company-mobile">Company Mobile Number:</label>
+                <input type="text" id="company-mobile" name="company-mobile" readonly>
+            </div>
+        </form>
+    </div>
+</div>

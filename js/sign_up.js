@@ -76,10 +76,6 @@ document.getElementById('signup-form').addEventListener('submit', function(event
         body: JSON.stringify(formData)
     })
     .then(response => response.ok ? response.json() : Promise.reject(response))
-    .then(data => {alert('Sign Up Successful!');
-        if(data.company_id == "undefined"){
-            window.location.href = 'company_register.html';
-        } 
-        console.log(data)})
+    .then(data => alert('Sign Up Successful!'))
     .catch(error => alert('Error during sign up. Please try again.'));
 });
