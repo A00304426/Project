@@ -1,9 +1,10 @@
-/* company_admin.css */
+/* company_registration.css */
 
-/* General styles */
+/* Existing General Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #f0f2f5;
 }
 
 /* Style for the main heading */
@@ -23,29 +24,37 @@ label {
     display: inline-block;
     width: 180px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+select {
     width: 300px;
-    padding: 5px;
+    padding: 8px;
     margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 input[readonly] {
     background-color: #f5f5f5;
 }
 
-button {
+button,
+.btn {
     padding: 10px 20px;
     background-color: #007BFF;
     color: #fff;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 1em;
 }
 
-button:hover {
+button:hover,
+.btn:hover {
     background-color: #0056b3;
 }
 
@@ -59,4 +68,119 @@ button:hover {
     min-width: 200px;
 }
 
-/* ... (existing styles for tabs and layout) ... */
+/* Popup Styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* Ensure it sits above other content */
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5em;
+    color: #aaa;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .popup-content {
+        width: 90%;
+        padding: 20px;
+    }
+
+    label,
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+        width: 100%;
+    }
+
+    label {
+        margin-bottom: 5px;
+    }
+}
+
+/* Additional Styles */
+
+/* Center the Create New Company Button */
+#create-company-btn {
+    display: block;          /* Makes the button a block-level element */
+    margin: 20px auto;      /* Centers the button horizontally and adds vertical spacing */
+    width: 200px;            /* Optional: Sets a fixed width for better appearance */
+}
+
+/* Example: Style for the "OR" heading */
+main h1 {
+    text-align: center;
+    margin: 20px 0;
+    color: #555;
+}
+
+/* Example: Style for the informational paragraph */
+main p {
+    text-align: center;
+    font-size: 1.1em;
+    color: #666;
+}

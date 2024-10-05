@@ -119,9 +119,9 @@ async function handleFormSubmit(event) {
 
     // Create the requirement object
     const requirement = {
-        companyRequirementId: companyRequirementId,
+        company_requirement_id: companyRequirementId,
         company_id: company_id,
-        selected_employee: 0,
+        selected_employee: [], // Initially set to null
         no_of_vacancies: no_of_vacancies,
         date: date,
         start_time: start_time,

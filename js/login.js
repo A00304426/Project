@@ -23,7 +23,8 @@ document.getElementById('login-form').addEventListener('submit', function (event
             alert('Labour Login Successful!');
             console.log('Logged in user:', data);
             // Redirect to dashboard or another page
-            // window.location.href = '/dashboard.html';
+            localStorage.setItem('labour_id', data.labour_id); // Store in localStorage
+            window.location.href = '/labour_dashboard.html';
         })
         .catch(labourError => {
             console.error('Labour Login Error:', labourError);
@@ -35,7 +36,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
             })
                 .then(response => response.ok ? response.json() : Promise.reject(response))
                 .then(data => {
-                    alert('Company Admin Login Successful!');
+                    alert('Company Admin Login Successfully!');
                     console.log('Logged in user:', data);
 
                     // Store company admin id in localStorage or pass it via URL to dashboard
