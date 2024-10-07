@@ -1,102 +1,168 @@
 <!-- company_admin_profile.html -->
 <style>
-    /* Profile forms */
-    .profile-form {
-        max-width: 600px;
-        margin: 0 auto 0 auto;
-        background-color: #ffffff;
-        padding: 30px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
+/* Profile forms */
+.profile-form {
+    max-width: 600px;
+    margin: 0 auto 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
 
-    /* Form groups */
+/* Form groups */
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    width: 200px;
+    /* Fixed width for labels */
+    font-weight: bold;
+    color: #555;
+    margin-right: 10px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group select {
+    flex: 1;
+    /* Input takes up remaining space */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group input[readonly] {
+    background-color: #e9ecef;
+}
+
+/* Button group */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
     .form-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .form-group label {
-        width: 200px;
-        /* Fixed width for labels */
-        font-weight: bold;
-        color: #555;
-        margin-right: 10px;
+        width: auto;
+        margin-right: 0;
+        margin-bottom: 5px;
     }
 
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="password"] {
-        flex: 1;
-        /* Input takes up remaining space */
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
+    .button-group {
+        flex-direction: column;
     }
 
-    .form-group input[readonly] {
-        background-color: #e9ecef;
+    .button-group .btn {
+        margin-bottom: 10px;
     }
+}
 
-    /* Responsive Design */
-    @media (max-width: 600px) {
-        .form-group {
-            flex-direction: column;
-            align-items: stretch;
-        }
+/* Admins Table */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
 
-        .form-group label {
-            width: auto;
-            margin-right: 0;
-            margin-bottom: 5px;
-        }
-    }
+.admin-table th,
+.admin-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
 
-    .btn {
-        padding: 12px 24px;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 4px;
-        border: none;
-    }
+.admin-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.admin-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.admin-table tr:hover {
+    background-color: #e9e9e9;
+}
+
 </style>
+<!-- company_admin_profile.html -->
 <div style="display: grid; grid-template-columns: 50% 50%; margin-top: -20px;">
-    <!-- Company Agent Profile -->
+    <!-- Company Admin Profile -->
     <div style="margin-right: 10px;">
-        <h2 class="section-title">Agent Profile</h2>
-        <form id="agent-profile-form" class="profile-form">
+        <h2 class="section-title">Admin Profile</h2>
+        <form id="admin-profile-form" class="profile-form">
             <div class="form-group">
-                <label for="agent-name">Name:</label>
-                <input type="text" id="agent-name" name="agent-name">
+                <label for="admin-name">Name:</label>
+                <input type="text" id="admin-name" name="admin-name" readonly>
             </div>
 
             <div class="form-group">
-                <label for="agent-mobile">Mobile Number:</label>
-                <input type="text" id="agent-mobile" name="agent-mobile">
+                <label for="admin-mobile">Mobile Number:</label>
+                <input type="text" id="admin-mobile" name="admin-mobile" readonly>
             </div>
 
             <div class="form-group">
-                <label for="agent-address">Address:</label>
-                <input type="text" id="agent-address" name="agent-address">
+                <label for="admin-address">Address:</label>
+                <input type="text" id="admin-address" name="admin-address" readonly>
             </div>
 
             <div class="form-group">
-                <label for="agent-city">City:</label>
-                <input type="text" id="agent-city" name="agent-city">
+                <label for="admin-city">City:</label>
+                <input type="text" id="admin-city" name="admin-city" readonly data-city-id="">
             </div>
 
             <div class="form-group">
-                <label for="agent-email">Email:</label>
-                <input type="email" id="agent-email" name="agent-email">
+                <label for="admin-email">Email:</label>
+                <input type="email" id="admin-email" name="admin-email" readonly>
             </div>
 
             <div class="form-group">
-                <label for="agent-password">Password:</label>
-                <input type="password" id="agent-password" name="agent-password">
+                <label for="admin-password">Password:</label>
+                <input type="password" id="admin-password" name="admin-password" readonly>
             </div>
 
-            <button type="button" id="agent-save-btn" class="btn btn-primary">Save Changes</button>
+            <div class="button-group">
+                <button type="button" id="edit-profile-btn" class="btn btn-primary">Edit Profile</button>
+                <button type="button" id="logout-btn" class="btn btn-secondary">Log Out</button>
+            </div>
         </form>
     </div>
 
@@ -124,5 +190,10 @@
                 <input type="text" id="company-mobile" name="company-mobile" readonly>
             </div>
         </form>
+
+        <!-- Container for Other Admins (visible only to main admin) -->
+        <div id="other-admins-container" style="margin-top: 20px;">
+            <!-- Admins table will be dynamically inserted here -->
+        </div>
     </div>
 </div>

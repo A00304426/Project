@@ -3,23 +3,26 @@
  */
 function initHome() {
     console.log('Home tab initialized successfully!');
-    
+
+    // Define the API URL (adjust if necessary)
+    window.apiUrl = 'http://localhost:8000';
+
     // Add event listener to the "Add Requirements" button
     const addRequirementsBtn = document.getElementById('add-requirements-btn');
     if (addRequirementsBtn) {
         addRequirementsBtn.addEventListener('click', openModal);
+    } else {
+        console.error('Add Requirements button not found');
     }
-    
+
     // Initialize modal functionality
     initModal();
 
     // Populate time options in the select dropdowns
     populateTimeOptions();
-    
+
     // Fetch and display existing company requirements
     fetchCompanyRequirements();
-    
-    // Add more interactive functionality as needed
 }
 
 /**
@@ -31,11 +34,16 @@ function initModal() {
     const closeBtn = document.querySelector('.close-btn');
     const form = document.getElementById('add-requirement-form');
 
+    if (!modal || !closeBtn || !form) {
+        console.error('Modal elements not found');
+        return;
+    }
+
     // Close modal when 'x' is clicked
     closeBtn.addEventListener('click', closeModal);
 
     // Close modal when clicking outside the modal content
-    window.addEventListener('click', function(event) {
+    window.addEventListener('click', function (event) {
         if (event.target === modal) {
             closeModal();
         }
@@ -111,17 +119,16 @@ async function handleFormSubmit(event) {
     }
 
     // Generate unique companyRequirementId (e.g., using current timestamp and a random number)
-    const companyRequirementId = generateUniqueId();
+    const company_requirement_id = generateUniqueId();
 
     // Retrieve company_id from localStorage
     const company_id = localStorage.getItem('company_id') || 'default_company_id'; // Fallback if not set
-    console.log('Company ID:', company_id);
 
     // Create the requirement object
     const requirement = {
-        company_requirement_id: companyRequirementId,
+        company_requirement_id: company_requirement_id,
         company_id: company_id,
-        selected_employee: [], // Initially set to null
+        select_labour: [], // Initially empty
         no_of_vacancies: no_of_vacancies,
         date: date,
         start_time: start_time,
@@ -135,7 +142,7 @@ async function handleFormSubmit(event) {
     console.log('New Company Requirement:', requirement);
 
     try {
-        const response = await fetch('http://localhost:8000/add_company_requirements', { // Adjust the URL as needed
+        const response = await fetch(`${apiUrl}/add_company_requirements`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -165,8 +172,10 @@ async function handleFormSubmit(event) {
  * Fetches Company Requirements from the Backend and Populates the Grid
  */
 async function fetchCompanyRequirements() {
+    const company_id = localStorage.getItem('company_id') || 'default_company_id';
     try {
-        const response = await fetch(`${apiUrl}/company_requirements`); // Adjust the URL as needed
+        console.log(apiUrl);
+        const response = await fetch(`${apiUrl}/company_requirements/${company_id}`);
         if (response.ok) {
             const requirements = await response.json();
             populateRequirementsGrid(requirements);
@@ -231,15 +240,259 @@ function populateRequirementsGrid(requirements) {
         const activeItem = createRequirementItem('Active:', requirement.active ? 'Yes' : 'No');
         card.appendChild(activeItem);
 
+        // Add "Active" and "Delete" buttons
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('button-container');
+
+        // Check if vacancies are filled
+        const selectedCount = requirement.select_labour.filter(a => a.selected).length;
+        const vacanciesFilled = selectedCount >= requirement.no_of_vacancies;
+
+        // Active Button
+        if (!vacanciesFilled) {
+            const activeButton = document.createElement('button');
+            activeButton.textContent = requirement.active ? 'Deactivate' : 'Activate';
+            activeButton.classList.add('btn', 'btn-secondary');
+            activeButton.addEventListener('click', () => {
+                updateActiveStatus(requirement.company_requirement_id, !requirement.active)
+                    .then(() => {
+                        // Refresh the grid
+                        fetchCompanyRequirements();
+                    })
+                    .catch(error => {
+                        console.error('Error updating active status:', error);
+                    });
+            });
+            buttonContainer.appendChild(activeButton);
+        }
+
+        // Delete Button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.classList.add('btn', 'btn-danger');
+        deleteButton.addEventListener('click', () => {
+            if (confirm('Are you sure you want to delete this requirement?')) {
+                deleteCompanyRequirement(requirement.company_requirement_id)
+                    .then(() => {
+                        fetchCompanyRequirements();
+                    })
+                    .catch(error => {
+                        console.error('Error deleting requirement:', error);
+                    });
+            }
+        });
+        buttonContainer.appendChild(deleteButton);
+
+        card.appendChild(buttonContainer);
+
+        // Append the requirement card to the grid
         gridContainer.appendChild(card);
 
-        const superCard = document.createElement('div');
-        superCard.classList.add('requirement-card');
+        // Create a container for applicants
+        const applicantsContainer = document.createElement('div');
+        applicantsContainer.classList.add('applicants-container');
 
-        gridContainer.appendChild(superCard).appendChild(document.createElement('div').appendChild(createRequirementItem('Selected Employee:', 'Select Employee'))); // Add a dummy element for better spacing
+        // Fetch applicants for the requirement
+        fetchApplicants(requirement.company_requirement_id)
+            .then(applicants => {
+                requirement.select_labour = applicants; // Update select_labour for vacancy calculation
+                const selectedCount = applicants.filter(a => a.selected).length;
+                const vacanciesFilled = selectedCount >= requirement.no_of_vacancies;
+
+                // If vacancies are filled, set the requirement to inactive
+                if (vacanciesFilled && requirement.active) {
+                    updateActiveStatus(requirement.company_requirement_id, false)
+                        .then(() => {
+                            requirement.active = false;
+                            activeItem.querySelector('.value').textContent = 'No';
+                            // Remove the active button if present
+                            if (buttonContainer.contains(activeButton)) {
+                                buttonContainer.removeChild(activeButton);
+                                buttonContainer.style = 'block';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error updating active status:', error);
+                        });
+                }
+
+                // Display applicants
+                if (applicants.length > 0) {
+                    const applicantsHeading = document.createElement('h4');
+                    applicantsHeading.textContent = 'Applicants:';
+                    applicantsContainer.appendChild(applicantsHeading);
+
+                    // Create a table to display applicants
+                    const table = document.createElement('table');
+                    table.classList.add('applicants-table');
+
+                    // Create table header
+                    const thead = document.createElement('thead');
+                    const headerRow = document.createElement('tr');
+                    const headers = ['Name', 'Mobile Number', 'City', 'Status'];
+                    headers.forEach(headerText => {
+                        const th = document.createElement('th');
+                        th.textContent = headerText;
+                        headerRow.appendChild(th);
+                    });
+                    thead.appendChild(headerRow);
+                    table.appendChild(thead);
+
+                    // Create table body
+                    const tbody = document.createElement('tbody');
+
+                    applicants.forEach(applicant => {
+                        // Hide unselected applicants if vacancies are filled
+                        if (vacanciesFilled && !applicant.selected) return;
+
+                        const row = document.createElement('tr');
+
+                        // Name
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = applicant.name;
+                        nameCell.setAttribute('data-label', 'Name');
+                        row.appendChild(nameCell);
+
+                        // Mobile Number
+                        const mobileCell = document.createElement('td');
+                        mobileCell.textContent = applicant.mobile_number;
+                        mobileCell.setAttribute('data-label', 'Mobile Number');
+                        row.appendChild(mobileCell);
+
+                        // City
+                        const cityCell = document.createElement('td');
+                        cityCell.textContent = applicant.city;
+                        cityCell.setAttribute('data-label', 'City');
+                        row.appendChild(cityCell);
+
+                        // Status (Select/Deselect button)
+                        const statusCell = document.createElement('td');
+                        statusCell.setAttribute('data-label', 'Status');
+
+                        if (applicant.selected) {
+                            // Show status as "Selected"
+                            const statusText = document.createElement('span');
+                            statusText.textContent = 'Selected';
+                            statusCell.appendChild(statusText);
+                        } else {
+                            // Select Button
+                            if (!vacanciesFilled) {
+                                const selectButton = document.createElement('button');
+                                selectButton.textContent = 'Select';
+                                selectButton.classList.add('btn', 'btn-primary');
+                                selectButton.addEventListener('click', () => {
+                                    updateSelection(requirement.company_requirement_id, applicant.labour_id, true)
+                                        .then(() => {
+                                            fetchCompanyRequirements();
+                                        })
+                                        .catch(error => {
+                                            console.error('Error updating selection:', error);
+                                        });
+                                });
+                                statusCell.appendChild(selectButton);
+                            }
+                        }
+
+                        row.appendChild(statusCell);
+
+                        tbody.appendChild(row);
+                    });
+
+                    table.appendChild(tbody);
+                    applicantsContainer.appendChild(table);
+                } else {
+                    const noApplicantsMessage = document.createElement('p');
+                    noApplicantsMessage.textContent = 'No applicants yet.';
+                    applicantsContainer.appendChild(noApplicantsMessage);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching applicants:', error);
+            });
+
+        // Append the applicants container to the grid
+        gridContainer.appendChild(applicantsContainer);
     });
-    // gridContainer.appendChild(document.createElement('div').appendChild(createRequirementItem('ABC','XYZ'))); // Add a dummy element for better spacing
+}
 
+/**
+ * Fetches Applicants for a Given Company Requirement
+ * @param {string} company_requirement_id 
+ * @returns {Promise<Array>}
+ */
+function fetchApplicants(company_requirement_id) {
+    return fetch(`${apiUrl}/company_requirement/${company_requirement_id}/applicants`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch applicants');
+            }
+            return response.json();
+        });
+}
+
+/**
+ * Updates the Active Status of a Company Requirement
+ * @param {string} company_requirement_id 
+ * @param {boolean} activeStatus 
+ * @returns {Promise}
+ */
+function updateActiveStatus(company_requirement_id, activeStatus) {
+    return fetch(`${apiUrl}/company_requirement/${company_requirement_id}/update_active_status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ active: activeStatus })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update active status');
+            }
+            return response.json();
+        });
+}
+
+/**
+ * Deletes a Company Requirement
+ * @param {string} company_requirement_id 
+ * @returns {Promise}
+ */
+function deleteCompanyRequirement(company_requirement_id) {
+    return fetch(`${apiUrl}/company_requirement/${company_requirement_id}`, {
+        method: 'DELETE'
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete company requirement');
+            }
+            return response.json();
+        });
+}
+
+/**
+ * Updates the Selection Status of a Labour Applicant
+ * @param {string} company_requirement_id 
+ * @param {string} labour_id 
+ * @param {boolean} selected 
+ * @returns {Promise}
+ */
+function updateSelection(company_requirement_id, labour_id, selected) {
+    return fetch(`${apiUrl}/company_requirement/${company_requirement_id}/select_labour`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            labour_id: labour_id,
+            selected: selected
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to update selection');
+            }
+            return response.json();
+        });
 }
 
 /**
@@ -287,8 +540,9 @@ function formatTimeDisplay(time) {
  */
 function formatDateDisplay(dateStr) {
     if (!dateStr) return '';
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const dateObj = new Date(year, month - 1, day);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    const dateObj = new Date(dateStr);
     return dateObj.toLocaleDateString(undefined, options);
 }
 
@@ -327,8 +581,7 @@ function populateTimeOptions() {
     const startTimeSelect = document.getElementById('start_time');
     const endTimeSelect = document.getElementById('end_time');
 
-    // Check if the elements are select elements
-    if (startTimeSelect.tagName.toLowerCase() === 'select' && endTimeSelect.tagName.toLowerCase() === 'select') {
+    if (startTimeSelect && endTimeSelect) {
         const times = generate30MinuteIntervals();
 
         // Populate Start Time Select
@@ -346,6 +599,8 @@ function populateTimeOptions() {
             option.textContent = formatTimeDisplay(time);
             endTimeSelect.appendChild(option.cloneNode(true));
         });
+    } else {
+        console.error('Start Time or End Time select elements not found');
     }
 }
 
@@ -355,16 +610,18 @@ function populateTimeOptions() {
  */
 function generate30MinuteIntervals() {
     const times = [];
-    for (let hour = 0; hour <= 24; hour++) {
+    for (let hour = 0; hour <= 23; hour++) {
         ['00', '30'].forEach(minute => {
-            // Prevent "24:30" as it's not a valid time
-            if (hour === 24 && minute !== '00') return;
             const formattedHour = hour.toString().padStart(2, '0');
             times.push(`${formattedHour}:${minute}`);
         });
     }
+    // Add 24:00 as the last option
+    times.push('24:00');
     return times;
 }
 
-// Export the initHome function to make it accessible globally
-window.initHome = initHome;
+// Initialize the home functionality when the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', function () {
+    initHome();
+});

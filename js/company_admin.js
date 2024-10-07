@@ -50,8 +50,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else if (tabId === 'home-tab') {
                     scriptToLoad = 'js/company_admin_home.js';
                     initFunction = 'initHome';
-                }
+                } else if (tabId === 'record-tab') {
+                    scriptToLoad = 'js/company_admin_review.js';
+                    initFunction = 'initReviewScreen';
 
+                }
                 if (scriptToLoad && initFunction) {
                     // Load the script if not already loaded
                     if (!loadedScripts[scriptToLoad]) {

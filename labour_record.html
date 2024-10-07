@@ -1,16 +1,18 @@
 <!-- labour_record.html -->
+
 <div class="content-section">
     <h3 class="section-title">Your Records</h3>
     
     <!-- Record Table -->
-    <table id="record-table" border="1" cellpadding="10" cellspacing="0">
+    <table id="record-table" class="record-table">
         <thead>
             <tr>
-                <th>Record ID</th>
-                <th>Job Title</th>
-                <th>Employer</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>Company Name</th>
+                <th>Address</th>
+                <th>Role</th>
+                <th>Date</th>
+                <th>Comments</th>
+                <th>Rating</th>
             </tr>
         </thead>
         <tbody>
@@ -18,3 +20,39 @@
         </tbody>
     </table>
 </div>
+
+<!-- Include styles -->
+<style>
+/* Styles for labour_record.html */
+
+/* Table Styles */
+.record-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.record-table th,
+.record-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+}
+.record-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+.record-table tr:nth-child(even){background-color: #f9f9f9;}
+.record-table tr:hover {background-color: #f1f1f1;}
+.no-records {
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+}
+/* Additional Styles */
+.section-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+</style>
+
+<!-- Include the script for labour records -->
+<script src="labour_record.js"></script>

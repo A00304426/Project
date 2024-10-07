@@ -1,18 +1,196 @@
 <!-- labour_profile.html -->
-<div class="content-section">
-    <h3 class="section-title">Your Profile</h3>
-    
-    <!-- Profile Information -->
-    <form id="profile-form">
-        <label for="full-name">Full Name:</label>
-        <input type="text" id="full-name" name="full_name" required>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Labour Profile</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        p{
+            margin-bottom: 10px;
+        }
+        /* Main Container */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
 
-        <label for="phone">Phone Number:</label>
-        <input type="text" id="phone" name="phone" required>
+        /* Profile Section */
+        .profile-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-right: 20px;
+        }
 
-        <button type="submit" class="btn btn-primary">Update Profile</button>
-    </form>
+        /* College Section */
+        .college-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+            background-color: #f3f3f3;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        /* Section Title */
+        .section-title {
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+            color: #333;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Label Styles */
+        label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Input and Select Styles */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Buttons Container */
+        .button-group {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* College Entry Styles */
+        .college-entry {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .college-entry:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 800px) {
+            .main-container {
+                flex-direction: column;
+                margin: 20px;
+            }
+
+            .profile-section,
+            .college-section {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Profile Section -->
+    <div class="profile-section">
+        <h3 class="section-title">Your Profile</h3>
+
+        <!-- Profile Information -->
+        <form id="profile-form">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" readonly required>
+
+            <label for="mobile-number">Mobile Number:</label>
+            <input type="text" id="mobile-number" name="mobile_number" readonly required>
+
+            <label for="email-id">Email ID:</label>
+            <input type="email" id="email-id" name="email_id" readonly required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" readonly required>
+
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address" readonly required>
+
+            <label for="city">City:</label>
+            <select id="city" name="city" disabled required>
+                <!-- Options will be populated dynamically -->
+            </select>
+
+            <div class="button-group">
+                <button type="button" id="edit-button" class="btn btn-secondary">Edit</button>
+                <button type="submit" id="update-button" class="btn btn-primary" style="display:none;">Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- College Information Section -->
+    <div class="college-section">
+        <h3 class="section-title">College Information</h3>
+
+        <!-- College Entries Container -->
+        <div id="college-entries">
+            <!-- College entries will be populated here -->
+        </div>
+
+        <!-- Add College Button -->
+        <button type="button" id="add-college-button" class="btn btn-primary">Add College Information</button>
+    </div>
 </div>
+
+<!-- Include your JavaScript file -->
+<script src="labour_profile.js"></script>
+</body>
+</html>

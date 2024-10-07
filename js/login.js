@@ -36,7 +36,7 @@ document.getElementById('login-form').addEventListener('submit', function (event
             })
                 .then(response => response.ok ? response.json() : Promise.reject(response))
                 .then(data => {
-                    alert('Company Admin Login Successfully!');
+                    alert('Company Admin Login Successful!');
                     console.log('Logged in user:', data);
 
                     // Store company admin id in localStorage or pass it via URL to dashboard

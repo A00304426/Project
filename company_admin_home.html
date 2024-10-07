@@ -1,104 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Company Admin Home</title>
-    <!-- Link to the external CSS file -->
-    <link rel="stylesheet" href="css/company_admin_home.css">
-    
-    <!-- Optional: Include Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body onload="initHome()">
-    <!-- Container for the "Home" text
-    <div class="home-container">
-        <h2 class="section-title">Home</h2>
-    </div> -->
+<!-- company_admin_home.html -->
+<!-- Link to the external CSS file -->
+<link rel="stylesheet" href="css/company_admin_home.css">
 
-    <!-- Container for the "Add Requirements" button -->
-    <div class="button-container">
-        <!-- Add Requirements Button -->
-        <button id="add-requirements-btn">
-            <i class="fas fa-plus"></i>
-            Add Requirements
-        </button>
+<!-- Optional: Include Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Container for the "Add Requirements" button -->
+<div class="button-container">
+    <!-- Add Requirements Button -->
+    <button id="add-requirements-btn">
+        <i class="fas fa-plus"></i>
+        Add Requirements
+    </button>
+</div>
+
+<!-- Container for the Requirements Grid -->
+<div class="grid-container">
+    <div id="requirements-grid" class="requirements-grid">
+        <!-- Dynamic requirement cards will be appended here -->
     </div>
+</div>
 
-    <!-- Container for the Requirements Grid -->
-    <div class="grid-container">
-        <!-- <h3>Company Requirements</h3> -->
-        <div id="requirements-grid" class="requirements-grid">
-            <!-- Dynamic requirement cards will be appended here -->
-        </div>
+<!-- Modal Structure -->
+<div id="addRequirementModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>Add New Requirement</h2>
+        <form id="add-requirement-form" class="modal-form">
+            <!-- Form Fields -->
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <input type="text" id="role" name="role" required>
+            </div>
+
+            <div class="form-group">
+                <label for="no_of_vacancies">Number of Vacancies:</label>
+                <input type="number" id="no_of_vacancies" name="no_of_vacancies" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="salary">Salary:</label>
+                <input type="number" id="salary" name="salary" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="start_time">Start Time:</label>
+                <!-- Using select for 30-minute intervals -->
+                <select id="start_time" name="start_time" required>
+                    <option value="">Select Start Time</option>
+                    <!-- JavaScript will populate options here -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="end_time">End Time:</label>
+                <!-- Using select for 30-minute intervals -->
+                <select id="end_time" name="end_time" required>
+                    <option value="">Select End Time</option>
+                    <!-- JavaScript will populate options here -->
+                </select>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="active">Active</label>
+                <input type="checkbox" id="active" name="active" checked>
+            </div>
+
+            <div class="error-message" id="time-error">
+                End Time must be at least 30 minutes after Start Time.
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
     </div>
+</div>
 
-    <!-- <div class="grid-container"></div>
-        <h3>Selection Member</h3>
-        <div id="requirements-grid" class="requirements-grid">
-             Dynamic requirement cards will be appended here -->
-        <!-- </div>
-    </div> -->
-
-    <!-- Modal Structure -->
-    <div id="addRequirementModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">&times;</span>
-            <h2>Add New Requirement</h2>
-            <form id="add-requirement-form" class="modal-form">
-                <!-- Form Fields -->
-                <div class="form-group">
-                    <label for="role">Role:</label>
-                    <input type="text" id="role" name="role" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="no_of_vacancies">Number of Vacancies:</label>
-                    <input type="number" id="no_of_vacancies" name="no_of_vacancies" min="1" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="salary">Salary:</label>
-                    <input type="number" id="salary" name="salary" min="0" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="start_time">Start Time:</label>
-                    <!-- Using select for 30-minute intervals -->
-                    <select id="start_time" name="start_time" required>
-                        <option value="">Select Start Time</option>
-                        <!-- JavaScript will populate options here -->
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="end_time">End Time:</label>
-                    <!-- Using select for 30-minute intervals -->
-                    <select id="end_time" name="end_time" required>
-                        <option value="">Select End Time</option>
-                        <!-- JavaScript will populate options here -->
-                    </select>
-                </div>
-
-                <div class="form-group full-width">
-                    <label for="active">Active</label>
-                    <input type="checkbox" id="active" name="active" checked>
-                </div>
-
-                <div class="error-message" id="time-error">
-                    End Time must be at least 30 minutes after Start Time.
-                </div>
-
-                <button type="submit">Submit</button>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Link to the external JS file -->
-    <script src="js/company_admin_home.js"></script>
-</body>
-</html>
+<!-- Link to the external JS file -->
+<script src="js/company_admin_home.js"></script>
